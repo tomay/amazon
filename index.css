@@ -3,9 +3,11 @@
 /*general*/
 html, body, #map { height: 100%, padding:0; margin: 0;}
 
+:focus {outline: none;}
+
 /*fonts*/
-body {font-family: 'Open Sans', sans-serif;}
-h2 {font-family: 'Montserrat', sans-serif;}
+body {font-family: 'Open Sans', sans-serif; font-size: 13px;}
+h2 {font-family: 'Lato', sans-serif; font-size:24px;}
 
 
 /*map controls*/
@@ -13,12 +15,22 @@ h2 {font-family: 'Montserrat', sans-serif;}
 
 
 /* map elements */
-#select-box {
+#select-panel {
   background: #fff;
-  height: 139px;
+  height: auto;
   width: 259px;
   position: absolute;
   top: 10px;
-  padding-left: 1em;
+  padding: 0 1em 2.5em 2.5em;
+  border: 2px solid rgba(0,0,0,.2);
 }
 
+select#goulding-select {width: 200px; font-size: 13px;}
+
+/*select2 styles*/
+.select2-container--default .select2-selection--single {font-size: 14px;}
+
+/*results table */
+table#results-table {color:#7e7e7e; margin-top: 1em;}
+table#results-table td:first-child {padding-right: 8px;}
+table#results-table td {line-height:1.7; vertical-align: bottom;}

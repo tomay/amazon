@@ -1,7 +1,7 @@
 // index.js
-var MAP; var HIGHLIGHT;
+var MAP; var HIGHLIGHT; var LAYERS = {};
 var BOUNDS = [[-20.1, -79.8],[5.2, -43]]; 
-var HIGHLIGHT_STYLE = {fillOpacity: 0, opacity: 0.7};
+var HIGHLIGHT_STYLE = {fillOpacity: 0, opacity: 0.9};
 
 // functions called on doc ready
 $(document).ready(function(){
@@ -30,10 +30,13 @@ function initMap() {
 	var zoomHome = new L.Control.zoomHome();
 	zoomHome.addTo(MAP);
 
+	zIndex = 10;
+
 	// add streets
 	var OpenStreetMap_BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 		maxZoom: 18,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+		zIndex: zIndex++
 	}).addTo(MAP);
 
 	// add forest
@@ -41,29 +44,19 @@ function initMap() {
 		tms: true,
 		maxZoom: 10,
 		// errorTileUrl: './images/blank256.png'
-		bounds: [[-30, -80],[9, -44]]
+		bounds: [[-30, -80],[9, -44]],
+		zIndex: zIndex++
 	}).addTo(MAP);
-
-	// add basin boundary
-    cartodb.createLayer(MAP, 'https://rebioma.cartodb.com/api/v2/viz/e8702c42-5e48-11e5-8515-0e4fddd5de28/viz.json')
-        .addTo(MAP)
-    .on('done', function(layer) {
-
-    layer.setInteraction(false);
-
-    layer.on('error', function(err) {
-        	cartodb.log.log('error: ' + err);
-    	});
-    }).on('error', function() {
-     	cartodb.log.log("some error occurred");
-    });
+	LAYERS['forest'] = forest;
 
 	// add Goulding basins
-    cartodb.createLayer(MAP, 'https://rebioma.cartodb.com/api/v2/viz/b344e3d6-5e49-11e5-a9bb-0e73ffd62169/viz.json')
+    cartodb.createLayer(MAP, 'https://rebioma.cartodb.com/api/v2/viz/23f7fb56-60b4-11e5-9325-0e73ffd62169/viz.json')
         .addTo(MAP)
     .on('done', function(layer) {
 
     layer.setInteraction(true);
+	layer.setZIndex(zIndex++);
+	LAYERS['goulding'] = layer;
 
     layer.on('error', function(err) {
             cartodb.log.log('error: ' + err);
@@ -78,6 +71,8 @@ function initMap() {
     .on('done', function(layer) {
 
     layer.setInteraction(false);
+	layer.setZIndex(zIndex++);
+	LAYERS['rivers'] = layer;
 
     layer.on('error', function(err) {
             cartodb.log.log('error: ' + err);
@@ -85,6 +80,38 @@ function initMap() {
     }).on('error', function() {
     	cartodb.log.log("some error occurred");
     });    
+
+    // protected areas and indigenous reserves 
+    // https://rebioma.cartodb.com/api/v2/viz/6841a8ae-60a3-11e5-af5e-0e73ffd62169/viz.json
+    cartodb.createLayer(MAP, 'https://rebioma.cartodb.com/api/v2/viz/6841a8ae-60a3-11e5-af5e-0e73ffd62169/viz.json')
+        .addTo(MAP)
+    .on('done', function(layer) {
+
+	layer.setInteraction(false);
+	layer.setZIndex(zIndex++);
+	LAYERS['pas'] = layer;
+
+    layer.on('error', function(err) {
+            cartodb.log.log('error: ' + err);
+        });
+    }).on('error', function() {
+    	cartodb.log.log("some error occurred");
+    });    
+
+	// add Amazon basin outline last
+    cartodb.createLayer(MAP, 'https://rebioma.cartodb.com/api/v2/viz/e8702c42-5e48-11e5-8515-0e4fddd5de28/viz.json')
+        .addTo(MAP)
+    .on('done', function(layer) {
+
+    layer.setInteraction(false);
+	layer.setZIndex(zIndex++);
+
+    layer.on('error', function(err) {
+        	cartodb.log.log('error: ' + err);
+    	});
+    }).on('error', function() {
+     	cartodb.log.log("some error occurred");
+    });
 
     // instantiate highlights as empty layer group
     HIGHLIGHT = L.layerGroup([]).addTo(MAP);
@@ -97,7 +124,7 @@ function initBasinSelect() {
 	$('#goulding-select').select2({placeholder: "Select a basin", minimumResultsForSearch: Infinity});
 
 	$('#goulding-select').on('change', function() {
-		var val = $('#goulding-select option:selected').val();
+		var val = $('#goulding-select option:selected').attr('name');
 		var query = "SELECT * FROM goulding WHERE goulding = '" + val + "'"; 
 		var sql = new cartodb.SQL({ user: 'rebioma' });
 
@@ -106,12 +133,35 @@ function initBasinSelect() {
 			MAP.fitBounds(bounds);
 		});
 
+		// update the results-pane
+		query_no_geom = "SELECT area_km2, status, trajectory, defor01_12 FROM goulding WHERE goulding = '" + val + "'"; 
+		sql.execute(query_no_geom).done(function(results){
+			var area       = results.rows[0]['area_km2'];
+			area = Math.round(area).toLocaleString() + ' km<sup>2</sup>';
+			var defor      = results.rows[0]['defor01_12'];
+			defor = Math.round(defor).toLocaleString() + ' km<sup>2</sup>';
+			var trajectory = results.rows[0]['trajectory'];
+			var status     = results.rows[0]['status'];
+			
+			// fill in the blanks
+			$('div#results-pane table td[data-cell="area"]').html(area);
+			$('div#results-pane table td[data-cell="defor"]').html(defor);
+			$('div#results-pane table td[data-cell="trajectory"]').text(trajectory);
+			$('div#results-pane table td[data-cell="status"]').text(status);
+
+			// show it
+			$('div#results-pane').show();
+			
+		});
+
 		// highlight the selection
 		var sqljson = new cartodb.SQL({ user: 'rebioma', format: 'geojson' });
 		sqljson.execute(query).done(function(geojson){
 			if (HIGHLIGHT.getLayers().length > 0) HIGHLIGHT.clearLayers();
 			L.geoJson(geojson,{style: HIGHLIGHT_STYLE}).addTo(HIGHLIGHT);			
-		})
+		});
+
+		
 
 	})
 
