@@ -3,7 +3,9 @@
 /*general*/
 html, body, #map { height: 100%, padding:0; margin: 0;}
 
-body {font-family: 'Lato', sans-serif;}
+/*fonts*/
+body {font-family: 'Open Sans', sans-serif;}
+h2 {font-family: 'Montserrat', sans-serif;}
 
 
 /*map controls*/
