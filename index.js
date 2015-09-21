@@ -93,6 +93,8 @@ function initMap() {
 
 
 function initBasinSelect() {
+	// initialize select2
+	$('#goulding-select').select2({placeholder: "Select a basin", minimumResultsForSearch: Infinity});
 
 	$('#goulding-select').on('change', function() {
 		var val = $('#goulding-select option:selected').val();

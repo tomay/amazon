@@ -8,8 +8,8 @@
     <!-- <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" /> -->
     
     <!-- cartodb.js library -->
-    <script src="https://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
-    <link rel="stylesheet" href="https://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
     <!-- font awesome for the icon(s) -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<!-- jquery for everything -->
@@ -20,12 +20,17 @@
     <!-- fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+  
+  	<!-- select2 for styling selects -->
+	<link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+
   </head>
   <body>
     <div id="map"></div>
     <div id="select-box">
         <h2>Select a basin</h2>
-	    <select id="goulding-select">
+	    <select id="goulding-select" style="width:200px; margin-left:10px;">
 	    	<option name="Caquetá-Japurá">Caquetá-Japurá</option>
 	    	<option name="Juruá">Juruá</option>
 	    	<option name="Madeira">Madeira</option>
