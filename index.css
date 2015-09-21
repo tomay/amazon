@@ -17,9 +17,6 @@ body {font-family: 'Lato', sans-serif;}
   width: 259px;
   position: absolute;
   top: 10px;
+  padding-left: 1em;
 }
 
-#select-box h2 { margin-left:10px;}
-#goulding-select {
- 	position:relative; top:40px; left: 10px; z-index:10000; height:25px;
-}
