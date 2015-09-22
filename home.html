@@ -28,44 +28,53 @@
 
   </head>
   <body>
-    <div id="map"></div>
-    <div id="select-panel">
-        <h2>Amazon Freshwater Basins</h2>
-        <span style="color:#7e7e7e; font-size:12px; display:inline-block; margin:4px 10px 9px 4px; padding-right:32px;">Select a Goulding basin to highlight on the map</span>
-	    <select id="goulding-select">
-	    	<option></option>
-	    	<option name="Caquetá-Japurá">Caquetá-Japurá</option>
-	    	<option name="Juruá">Juruá</option>
-	    	<option name="Madeira">Madeira</option>
-	    	<option name="Marañón">Marañón</option>
-	    	<option name="Negro">Negro</option>
-	    	<option name="Other basins">Other Basins</option>
-	    	<option name="Purus">Purus</option>
-	    	<option name="Putumayo-Içá">Putumayo-Içá</option>
-	    	<option name="Tapajós">Tapajós</option>
-	    	<option name="Tocantins">Tocantins</option>
-	    	<option name="Uatumã-Trombetas">Uatumã-Trombetas</option>
-	    	<option name="Ucayali">Ucayali</option>
-	    	<option name="Xingu">Xingu</option>
-	    </select>
+    <div id="map">
+	    <div id="select-panel">
+	        <h2>Amazon Freshwater Basins</h2>
+	        <span style="color:#7e7e7e; font-size:12px; display:inline-block; margin:4px 10px 9px 4px; padding-right:32px;">Select a Goulding basin to highlight on the map</span>
+		    <select id="goulding-select">
+		    	<option></option>
+		    	<option name="Caquetá-Japurá">Caquetá-Japurá</option>
+		    	<option name="Juruá">Juruá</option>
+		    	<option name="Madeira">Madeira</option>
+		    	<option name="Marañón">Marañón</option>
+		    	<option name="Negro">Negro</option>
+		    	<option name="Other basins">Other Basins</option>
+		    	<option name="Purus">Purus</option>
+		    	<option name="Putumayo-Içá">Putumayo-Içá</option>
+		    	<option name="Tapajós">Tapajós</option>
+		    	<option name="Tocantins">Tocantins</option>
+		    	<option name="Uatumã-Trombetas">Uatumã-Trombetas</option>
+		    	<option name="Ucayali">Ucayali</option>
+		    	<option name="Xingu">Xingu</option>
+		    </select>
 
-	    <div id="results-pane" style="display:none;">
-	    	<table id="results-table">
-	    	<tr>
-		    	<td>Area</td><td data-cell="area"></td>
-	    	</tr>
-	    	<tr>
-		    	<td>Deforestation</td><td data-cell="defor"></td>
-	    	</tr>
-	    	<tr>
-		    	<td>Status</td><td data-cell="status"></td>
-	    	</tr>
-	    	<tr>
-		    	<td>Trajectory</td><td data-cell="trajectory"></td>
-	    	</tr>
+		    <div id="results-pane" style="display:none;">
+		    	<table id="results-table">
+			    	<tr>
+				    	<td>Area</td><td data-cell="area"></td>
+			    	</tr>
+			    	<tr>
+				    	<td>Deforestation</td><td data-cell="defor"></td>
+			    	</tr>
+			    	<tr>
+				    	<td>Status</td><td data-cell="status"></td>
+			    	</tr>
+			    	<tr>
+				    	<td>Trajectory</td><td data-cell="trajectory"></td>
+			    	</tr>
+		    	</table>
 
+		    </div><!-- results pane -->
+	    </div><!-- select panel -->
+
+	    <div id="layer-panel">
+	    	<p style="font-size:140%; font-weight:bold;">Layers</p>
+	  		<label><input type="checkbox" data-layer="forest" checked>Forest cover 2001-2012</label>
+	    	<label><input type="checkbox" data-layer="pas" checked>Protected areas</label> 
+	    	<label><input type="checkbox" data-layer="goulding" checked>Goulding basins</label> 
 	    </div>
-    </div><!-- select panel -->
+	</div><!-- map -->
 
   </body>
 </html>

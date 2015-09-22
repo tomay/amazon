@@ -7,6 +7,7 @@ var HIGHLIGHT_STYLE = {fillOpacity: 0, opacity: 0.9};
 $(document).ready(function(){
 	initMapControls();
 	initMap();
+	initLayerPanel();
 	initBasinSelect();
 
 	resizeMap();
@@ -116,6 +117,10 @@ function initMap() {
     // instantiate highlights as empty layer group
     HIGHLIGHT = L.layerGroup([]).addTo(MAP);
 
+    // stop propogation on a couple of map panel divs
+    stopPropogationOnDiv('layer-panel');
+    stopPropogationOnDiv('select-panel');
+
 }
 
 
@@ -161,10 +166,20 @@ function initBasinSelect() {
 			L.geoJson(geojson,{style: HIGHLIGHT_STYLE}).addTo(HIGHLIGHT);			
 		});
 
-		
-
 	})
 
+}
+
+function initLayerPanel() {
+	$('#layer-panel input').on('change', function() {
+		var check = $(this);
+		var layer = check.data('layer');
+		if ( (check).is(':checked') ) {
+			MAP.addLayer(LAYERS[layer])
+		} else {
+			MAP.removeLayer(LAYERS[layer])
+		}
+	});
 }
 
 function initMapControls() {
@@ -255,4 +270,16 @@ function resizeMap() {
 	$('#map').height(height);
 	MAP.invalidateSize();
 
+}
+
+function stopPropogationOnDiv(div_id) {
+	var div = L.DomUtil.get(div_id);
+	if (!L.Browser.touch) {
+	    L.DomEvent.disableClickPropagation(div);
+	    L.DomEvent.on(div, 'mousewheel', L.DomEvent.stopPropagation);
+	} else {
+	    L.DomEvent.disableClickPropagation(div);
+	    L.DomEvent.on(div, 'click', L.DomEvent.stopPropagation);
+	    L.DomEvent.on(div, 'drag', L.DomEvent.stopPropagation);
+	}
 }
